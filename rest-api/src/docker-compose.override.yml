@@ -1,0 +1,20 @@
+version: '3.8'
+services:
+  db:
+    container_name: bloggingdb
+    hostname: bloggingdb
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    ports:
+      - 6432:${DB_PORT}
+    volumes:
+      - blogging_data:/var/lib/postgresql/data
+
+  jelou.api:
+    container_name: jelou.api
+    ports:
+      - 8888:8080
+    depends_on:
+      - db

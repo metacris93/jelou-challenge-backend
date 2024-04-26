@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:14
+    restart: always
+  jelou.api:
+    image: ${DOCKER_REGISTRY-}jelou
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+volumes:
+  blogging_data:
