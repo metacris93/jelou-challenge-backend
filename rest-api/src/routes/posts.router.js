@@ -5,9 +5,13 @@ const router = express.Router();
 const PostsService = require('./../services/post.service');
 const postService = new PostsService();
 
-router.get('/', async (req, res) => {
-  const posts = await postService.find();
-  res.json(posts);
+router.get('/', async (req, res, next) => {
+  try {
+    const posts = await postService.find(req.query);
+    res.json(posts);
+  } catch (error) {
+    next(error);
+  }
 });
 router.post('/', async (req, res) => {
   const body = req.body;

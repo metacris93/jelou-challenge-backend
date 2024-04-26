@@ -21,11 +21,25 @@ const PostSchema={
         type:DataTypes.DATE,
         field:'create_at',
         defaultValue:Sequelize.NOW
-    }
+    },
+    // tag_count: {
+    //     type:DataTypes.VIRTUAL,
+    //     get(){
+    //         return this.tags.length;
+    //     }
+    // },
+    // category_count: {
+    //     type:DataTypes.VIRTUAL,
+    //     get(){
+    //         return this.categories.length;
+    //     }
+    // }
 }
 class Post extends Model {
     static associate(models){
         this.hasMany(models.Comment, {foreignKey:'postId', as:'comments'});
+        this.belongsToMany(models.Tag, {through:models.PostTag, foreignKey:'postId', otherKey: 'tagId', as:'tags'});
+        this.belongsToMany(models.Category, {through:models.PostCategory, foreignKey:'postId', otherKey: 'categoryId', as:'categories'});
     }
     static config(sequelize){
         return{

@@ -8,10 +8,10 @@ const commentsRouter = require('./comments.router');
 function routerApi(app) {
   const router = express.Router();
   app.use('/api/v1', router);
-  router.use('/post', postsRouter);
-  router.use('/tag', tagsRouter);
-  router.use('/category', categoriesRouter);
-  router.use('/comment', commentsRouter);
+  router.use('/posts', postsRouter);
+  router.use('/tags', tagsRouter);
+  router.use('/categories', categoriesRouter);
+  router.use('/comments', commentsRouter);
 }
 
 module.exports = routerApi;
