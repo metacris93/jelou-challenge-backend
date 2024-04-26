@@ -14,17 +14,25 @@ router.post('/', async (req, res) => {
   const tag = await categoryService.create(body);
   res.json(tag);
 });
-router.patch('/:id', async (req, res) => {
-  const { id } = req.params;
-  const body = req.body;
-  const category = await categoryService.update(id, body);
-  res.json(category);
+router.patch('/:id', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const body = req.body;
+    const category = await categoryService.update(id, body);
+    res.json(category);
+  } catch (error) {
+    next(error)
+  }
 });
-router.delete('/:id', async (req, res) => {
-  const { id } = req.params;
-  await categoryService.delete(id);
-  res.statusCode = 204;
-  res.json();
+router.delete('/:id', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    await categoryService.delete(id);
+    res.statusCode = 204;
+    res.json();
+  } catch (error) {
+    next(error)
+  }
 });
 
 module.exports = router;

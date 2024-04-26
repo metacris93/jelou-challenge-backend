@@ -1,25 +1,20 @@
 const { Model, DataTypes, Sequelize } = require('sequelize');
 
-const USER_TABLE='users';
-const UserSchema={
+const POST_TABLE='posts';
+const PostSchema={
     id:{
         allowNull:false,
         autoIncrement:true,
         primaryKey:true,
         type:DataTypes.INTEGER
     },
-    username:{
-        allowNull:false,
-        type:DataTypes.STRING,
-        unique:true,
-    },
-    password:{
+    title:{
         allowNull:false,
         type:DataTypes.STRING
     },
-    name: {
-        allowNull: false,
-        type: DataTypes.STRING
+    content:{
+        allowNull:false,
+        type:DataTypes.TEXT
     },
     createdAt:{
         allowNull:false,
@@ -28,15 +23,17 @@ const UserSchema={
         defaultValue:Sequelize.NOW
     }
 }
-class User extends Model {
-    static associate(){}
+class Post extends Model {
+    static associate(models){
+        this.hasMany(models.Comment, {foreignKey:'postId', as:'comments'});
+    }
     static config(sequelize){
         return{
             sequelize,
-            tableName:USER_TABLE,
-            modelName:'User',
+            tableName:POST_TABLE,
+            modelName:'Post',
             timestamps:false
         }
     }
 }
-module.exports = { USER_TABLE, UserSchema, User }
+module.exports = { POST_TABLE, PostSchema, Post }

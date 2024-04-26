@@ -1,5 +1,6 @@
 const express = require('express');
 const routerApi = require('./routes');
+const { logErrors, errorHandler, boomErrorHandler, ormErrorHandler } = require('./middlewares/error.handler');
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -13,6 +14,11 @@ app.get('/', (req, res) => {
 });
 
 routerApi(app);
+
+app.use(logErrors);
+app.use(ormErrorHandler);
+app.use(boomErrorHandler);
+app.use(errorHandler);
 
 app.listen(port, function () {
   console.log('Example app listening on port 8080!');
