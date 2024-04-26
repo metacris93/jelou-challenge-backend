@@ -5,17 +5,6 @@ const router = express.Router();
 const CategoriesService = require('../services/category.service');
 const categoryService = new CategoriesService();
 
-/**
- * @swagger
- * /v1/categories:
- *   get:
- *     summary: get categories
- *     tags: [Categories]
- *     responses:
- *       200:
- *         description: Successful response
- *
- */
 router.get('/', async (req, res) => {
   const categories = await categoryService.find();
   res.json(categories);
