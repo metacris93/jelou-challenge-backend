@@ -1,11 +1,14 @@
 const express = require('express');
+const passport = require('passport');
 
 const UsersService = require('./../services/user.service');
 
 const router = express.Router();
 const service = new UsersService();
 
-router.get('/', async (req, res, next) => {
+router.get('/', 
+  passport.authenticate('jwt', { session: false }),
+  async (req, res, next) => {
   try {
     const users = await service.find();
     res.json(users);
@@ -14,7 +17,9 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', 
+  passport.authenticate('jwt', { session: false }),
+  async (req, res, next) => {
     try {
       const { id } = req.params;
       const category = await service.findOne(id);
@@ -36,7 +41,9 @@ router.post('/', async (req, res, next) => {
   }
 );
 
-router.patch('/:id', async (req, res, next) => {
+router.patch('/:id', 
+  passport.authenticate('jwt', { session: false }),
+  async (req, res, next) => {
     try {
       const { id } = req.params;
       const body = req.body;
@@ -48,7 +55,9 @@ router.patch('/:id', async (req, res, next) => {
   }
 );
 
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', 
+  passport.authenticate('jwt', { session: false }),
+  async (req, res, next) => {
     try {
       const { id } = req.params;
       await service.delete(id);

@@ -3,18 +3,33 @@ services:
   db:
     container_name: bloggingdb
     hostname: bloggingdb
-    environment:
-      - POSTGRES_DB=${DB_NAME}
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    env_file:
+      - pgsql.env
     ports:
-      - 6432:${DB_PORT}
+      - 6432:5432
     volumes:
       - blogging_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U root']
+      interval: 60s
 
   jelou.api:
     container_name: jelou.api
+    env_file:
+      - .env
     ports:
       - 8888:8080
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+      run-migration:
+        condition: service_started
+
+  run-migration:
+    build:
+      context: .
+    command: wait-for-it.sh -t 10 db:5432 -- npm run migrations:run
+    restart: on-failure:5
+    depends_on:
+      db:
+        condition: service_healthy

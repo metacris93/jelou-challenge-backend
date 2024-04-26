@@ -11,13 +11,19 @@ const authRouter = require('./auth.router');
 function routerApi(app) {
   const router = express.Router();
   app.use('/api/v1', router);
-  router.use('/posts', postsRouter);
-  router.use('/tags', tagsRouter);
+  router.use('/posts',
+    passport.authenticate('jwt', { session: false }),
+    postsRouter);
+  router.use('/tags',
+    passport.authenticate('jwt', { session: false }),
+    tagsRouter);
   router.use('/categories', 
     passport.authenticate('jwt', { session: false }), 
     categoriesRouter
   );
-  router.use('/comments', commentsRouter);
+  router.use('/comments', 
+    passport.authenticate('jwt', { session: false }),
+    commentsRouter);
   router.use('/users', usersRouter);
   router.use('/auth', authRouter);
 }
